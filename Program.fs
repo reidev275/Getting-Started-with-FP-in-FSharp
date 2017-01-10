@@ -5,6 +5,7 @@ open Suave.Html
 open Suave.Operators
 open Suave.Successful
 open Suave.RequestErrors
+open Suave.Utils
 open Locations.Layout
 open FSharp.Data
 
@@ -25,6 +26,37 @@ let locationCard location =
         ]
     ]
 
+let getLocationById id =
+    use query = new SqlCommandProvider<"Select * from Locations where id = @id", db, SingleRow=true>(db)
+    query.Execute(id)
+    |> Option.map (fun loc -> { Id = loc.Id; City = loc.City; State = loc.State })
+
+let routeLocationById maybeLocation =
+    match maybeLocation with 
+    | None -> never
+    | Some loc -> 
+        { Id = loc.Id; City = loc.City; State = loc.State }
+        |> locationCard
+        |> fun x -> 
+            h "div" [] [ 
+                x 
+                h "form" ["action", "/locations/delete/" + (string loc.Id); "method", "POST"] [ 
+                    h "input" ["type", "submit"; "value", "Delete Location"] [] 
+                ]
+            ]
+        |> master (loc.City + ", " + loc.State)
+        |> xmlToString
+        |> OK
+
+let locationById id = 
+    id
+    |> getLocationById  // data access
+    |> routeLocationById  // view rendering
+
+
+
+
+
 let getAllLocations () =
     use query = new SqlCommandProvider<"Select * from Locations", db>(db)
     query.Execute()
@@ -43,11 +75,11 @@ let displayLocations getLocations =
     |> master "Locations"
     |> xmlToString
 
-
 let app = 
     choose [
         Slides.slides
-        path "/locations" >=> GET >=> request (fun _ -> OK (displayLocations getAllLocations))
+        path "/locations" >=> request (fun _ -> OK (displayLocations getAllLocations))
+        GET >=> pathScan "/locations/%d" locationById
         NOT_FOUND "This isn't the page you're looking for :handwave:"
         ]
         
