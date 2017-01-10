@@ -1,4 +1,5 @@
 ﻿module Locations.App
+open Locations.Either
 open Suave
 open Suave.Filters
 open Suave.Html
@@ -82,6 +83,71 @@ let displayLocations getLocations =
     }
 
 
+
+
+
+let insertLocation location =
+    use command = new SqlCommandProvider<"Insert into locations(city, [state]) values(@city, @state)", db>(db)
+    command.Execute(location.City, location.State)
+
+
+
+
+
+
+
+
+let locationFromForm form =
+    match form ^^ "City", form ^^ "State" with
+    | Choice1Of2 city, Choice1Of2 state -> Success { Id = -1; City = city; State = state }
+    | _ -> Failure "Could not create location from form" 
+
+let capitalizeState location = 
+    { location with State = location.State.ToUpper() }
+
+let stateIsTwoCharacters location =
+    if location.State.Length = 2
+    then Success location
+    else Failure "State Must be 2 characters"
+
+let noFieldsBlank location =
+    if System.String.IsNullOrWhiteSpace location.City || System.String.IsNullOrWhiteSpace location.State
+    then Failure "City and State are both required"
+    else Success location
+
+
+
+//--------------
+
+let createLocation location =
+    location 
+    |> locationFromForm
+    |> Either.bind noFieldsBlank
+    |> Either.bind stateIsTwoCharacters 
+    |> Either.map capitalizeState
+    |> Either.map insertLocation
+
+// ----- OR ------
+
+let createLocationCE loc = 
+    either {
+        let! fromForm = locationFromForm loc
+        let! noBlankFields = noFieldsBlank fromForm
+        let! twoCharState = stateIsTwoCharacters noBlankFields
+        let capsState = capitalizeState twoCharState
+        return insertLocation capsState 
+    }
+
+//-----------------
+
+
+
+let routeCreationResult either =
+    match either with
+    | Failure l -> CONFLICT (addLocationForm l)
+    | Success r -> CREATED (redirectPage "/locations")
+
+
 let app = 
     choose [
         Slides.slides
@@ -91,6 +157,11 @@ let app =
                     let! html = displayLocations getAllLocations
                     return! OK html x
                 }
+        path "/locations/add" >=> 
+            choose [
+               GET >=> OK (addLocationForm "")
+               POST >=> request (fun r -> createLocation r.form |> routeCreationResult)
+             ]
         GET >=> pathScan "/locations/%d" locationById
         NOT_FOUND "This isn't the page you're looking for :handwave:"
         ]
