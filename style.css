@@ -1,0 +1,157 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body > *:not(nav) {
+    padding: 20px;
+}
+
+html, input {
+    font-family: 'Ubuntu';
+    font-weight: 400;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    text-size-adjust:100%;
+    font-size: 18px;
+}
+
+a {
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+}
+
+
+html.cover {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+html.contain {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+html.cover body, html.contain body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff
+}
+
+html.cover body *, html.contain body {
+    text-align: center;
+}
+
+nav {
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+    nav > a {
+        margin: auto 10px;
+    }
+    
+        nav > a:hover {
+            opacity: 0.8; 
+            letter-spacing: 0.02em;
+            text-shadow: 5px 5px 10px #000;
+        }
+
+    nav img {
+        height: 50px;
+        width: 50px;
+    }
+    nav a {
+        color: #fff;
+        font-size: 18px;
+    }
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+    font-style: normal;
+    font-family: 'Special Elite', cursive;
+    margin: 0;
+}
+
+c-location {
+    padding: 5px 0;
+    display: block;
+}
+
+c-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 10px auto;
+}
+
+c-card {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 10px;
+    transition: 0.2s ease-in-out;
+}
+
+a c-card:hover {
+    box-shadow: #999 1px 1px 10px;
+
+}
+
+c-card h3 {
+    margin: 0;
+    padding: .6em; 
+    color: #fff;
+    background-color: #333;
+}
+
+c-card img {
+    height: 150px;
+}
+
+form {
+    margin: 20px 0;
+}
+
+form label {
+    display: block;
+}
+
+input {
+    padding: 5px;
+    margin: 5px 0 10px 0;
+    border: 1px solid #eee;
+    background-color: #f3f3f3;
+    outline-color: #30b9db;
+}
+
+input[type=submit], a[role=button] {
+    background-color: #30b9db;
+    border-radius: 1px;
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    cursor: pointer;
+    text-shadow: none;
+    transition: 0.3s ease-in-out;
+}
+
+
+    input[type=submit]:hover, a[role=button]:hover {
+        text-shadow: 5px 5px 5px rgba(0,0,0,.3);
+    }
+
+.errors {
+    color: #913216;
+    font-weight: bold;
+}
