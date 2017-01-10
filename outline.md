@@ -33,7 +33,7 @@ Show SelectById with TP `git checkout maybe`
 Show Async `git checkout async` 
 	- shows parameters (36)
 
-Show insert with TP and parameters `git checkout master`
+Show insert with TP and parameters `git checkout businesslogic`
 	- knows order and type of args (38)
 
 Add business logic
