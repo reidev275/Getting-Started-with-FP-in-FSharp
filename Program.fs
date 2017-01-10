@@ -58,27 +58,39 @@ let locationById id =
 
 
 let getAllLocations () =
-    use query = new SqlCommandProvider<"Select * from Locations", db>(db)
-    query.Execute()
-    |> Seq.map (fun x -> { Id = x.Id; City = x.City; State = x.State }) 
-    |> Seq.toList
+    async {
+        use query = new SqlCommandProvider<"Select * from Locations", db>(db)
+        let! locations = query.AsyncExecute()
+        return locations
+               |> Seq.map (fun x -> { Id = x.Id; City = x.City; State = x.State }) 
+               |> Seq.toList
+    }
 
 let displayLocations getLocations =
-    getLocations()
-    |> List.map locationCard 
-    |> cardList 
-    |> fun x -> 
-        h "div" [] [ 
-            x
-            h "a" ["role", "button"; "href", "/locations/add"] [text "Add Location"]
-        ]
-    |> master "Locations"
-    |> xmlToString
+    async {
+        let! locations = getLocations()
+        return locations
+                |> List.map locationCard 
+                |> cardList 
+                |> fun x -> 
+                    h "div" [] [ 
+                        x
+                        h "a" ["role", "button"; "href", "/locations/add"] [text "Add Location"]
+                    ]
+                |> master "Locations"
+                |> xmlToString
+    }
+
 
 let app = 
     choose [
         Slides.slides
-        path "/locations" >=> request (fun _ -> OK (displayLocations getAllLocations))
+        path "/locations" >=> 
+            fun (x: HttpContext) ->
+                async { 
+                    let! html = displayLocations getAllLocations
+                    return! OK html x
+                }
         GET >=> pathScan "/locations/%d" locationById
         NOT_FOUND "This isn't the page you're looking for :handwave:"
         ]
