@@ -8,7 +8,7 @@ body > *:not(nav) {
 }
 
 html, input {
-    font-family: 'Ubuntu';
+    font-family: 'Bookman Old Style';
     font-weight: 400;
     font-style: normal;
     -webkit-font-smoothing: antialiased;
@@ -38,11 +38,7 @@ html.cover body, html.contain body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: #fff
-}
-
-html.cover body *, html.contain body {
-    text-align: center;
+    color: black;
 }
 
 nav {
@@ -61,7 +57,6 @@ nav {
         nav > a:hover {
             opacity: 0.8; 
             letter-spacing: 0.02em;
-            text-shadow: 5px 5px 10px #000;
         }
 
     nav img {
@@ -77,9 +72,24 @@ nav {
 h1, h2, h3, h4, h5, h6 {
     font-weight: 400;
     font-style: normal;
-    font-family: 'Special Elite', cursive;
-    margin: 0;
+    margin: 0.2em 0;
+    background-color: #30b9db;
 }
+
+h1 {
+    font-size: 5vw;
+}
+
+h1:first-of-type {
+    margin-top: 3em;
+
+}
+
+h3 {
+    font-size: 3vw;
+}
+
+
 
 c-location {
     padding: 5px 0;
@@ -104,8 +114,7 @@ c-card {
 }
 
 a c-card:hover {
-    box-shadow: #999 1px 1px 10px;
-
+    opacity: 0.7;
 }
 
 c-card h3 {
@@ -113,6 +122,8 @@ c-card h3 {
     padding: .6em; 
     color: #fff;
     background-color: #333;
+    font-size:inherit;
+    border:none;
 }
 
 c-card img {
@@ -148,7 +159,7 @@ input[type=submit], a[role=button] {
 
 
     input[type=submit]:hover, a[role=button]:hover {
-        text-shadow: 5px 5px 5px rgba(0,0,0,.3);
+        opacity: 0.7;
     }
 
 .errors {

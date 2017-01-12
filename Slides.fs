@@ -10,6 +10,6 @@ let slides =
     choose [
         pathRegex "(.*)\.(css|jpg|png)" >=> Files.browseHome
         path "/" >=> OK index
-        path "/domaincodomain" >=> OK (coverPage "Domain Codomain" "contain" "/domain-codomain.png" [])
+        path "/domaincodomain" >=> OK (coverPage "Domain Codomain" "/domain-codomain.png" [])
         path "/summary" >=> OK summary
     ]

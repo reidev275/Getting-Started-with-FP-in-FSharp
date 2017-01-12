@@ -7,7 +7,7 @@ let style href = tag "link" [ "rel","stylesheet"; "href", href ] empty
 let headTag metaTitle = 
     head [
         title metaTitle
-        style "https://fonts.googleapis.com/css?family=Ubuntu|Special+Elite"
+        //style "https://fonts.googleapis.com/css?family=Ubuntu|Special+Elite"
         style "/style.css" 
     ]
 
@@ -47,8 +47,8 @@ let addLocationForm error =
 
 let cardList cards = h "c-list" [] cards
 
-let coverPage title cls img nodes =
-    h "html" [ "class", cls; "style", "background-image: url(" + img + ")"] [
+let coverPage title img nodes =
+    h "html" [ "class", "contain"; "style", "background-image: url(" + img + ")"] [
         headTag title
         body nodes
     ] |> xmlToString
@@ -57,7 +57,7 @@ let index =
     [ h "h1" [] [ text "Getting Started with Functional Programming in F#" ]
       h "h3" [] [ text "Codemash 2017 - 1/13/17 - 2:45 Salon H" ]
       h "h1" [] [ text "@ReidNEvans" ]
-    ] |> coverPage "Intro" "cover" "/clingmansdome.jpg"
+    ] |> coverPage "Intro" ""
 
 let summary =
     [
@@ -66,4 +66,4 @@ let summary =
       h "h3" [] [ text "ReidEvans.tech"]
       h "h3" [] [ text "@ReidNEvans"]
       h "h3" [] [ text "github.com/reidev275/Getting-Started-With-FP-in-FSharp"]
-    ] |> coverPage "Summary" "cover" "/clingmansdome.jpg"
+    ] |> coverPage "Summary" ""
