@@ -7,7 +7,6 @@ let style href = tag "link" [ "rel","stylesheet"; "href", href ] empty
 let headTag metaTitle = 
     head [
         title metaTitle
-        //style "https://fonts.googleapis.com/css?family=Ubuntu|Special+Elite"
         style "/style.css" 
     ]
 
