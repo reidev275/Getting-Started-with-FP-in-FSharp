@@ -32,6 +32,10 @@ let getLocationById id =
     query.Execute(id)
     |> Option.map (fun loc -> { Id = loc.Id; City = loc.City; State = loc.State })
 
+let deleteLocationById id =
+    use query = new SqlCommandProvider<"Delete from locations where id = @id", db>(db)
+    query.Execute(id)
+
 let routeLocationById maybeLocation =
     match maybeLocation with 
     | None -> never
@@ -162,6 +166,7 @@ let app =
                GET >=> OK (addLocationForm "")
                POST >=> request (fun r -> createLocation r.form |> routeCreationResult)
              ]
+        POST >=> pathScan "/locations/delete/%d" (fun x -> deleteLocationById x |> ignore; OK (redirectPage "/locations"))
         GET >=> pathScan "/locations/%d" locationById
         NOT_FOUND "This isn't the page you're looking for :handwave:"
         ]
